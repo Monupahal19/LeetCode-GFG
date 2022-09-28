@@ -10,31 +10,61 @@
  */
 class Solution {
 public:
-    bool checkPalindrome(vector<int> arr){
-        int n=arr.size();
-        int s=0;
-        int e=n-1;
+    
+    ListNode* getMid(ListNode* head){
+    
+            ListNode* slow =head;
+            ListNode* fast = head->next;
         
-        while(s<=e){
-            if(arr[s]!=arr[e]){
-                return false;
-            }
-            s++;
-            e--;
+        while(fast!=NULL && fast->next!=NULL){
+            slow = slow->next;
+            fast= fast->next->next;
         }
-        return true;
+        return slow;
+    }
+    
+    ListNode* reverse(ListNode* head){
+        
+        ListNode* prev = NULL;
+        ListNode* curr = head;
+        ListNode* forward;
+        
+        while(curr!=NULL){
+            forward = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = forward;
+        }
+        
+        return prev;
     }
     
     bool isPalindrome(ListNode* head) {
+     if(head==NULL || head->next==NULL){
+         return true;
+     }
         
-        vector<int> arr;
-        ListNode* temp = head;
+        ListNode* middle = getMid(head); // find middle node
         
-        while(temp!=NULL){
-            arr.push_back(temp->val);
-            temp= temp->next;
+        ListNode* temp = middle->next;
+        middle->next = reverse(temp);   //attch next reverse part to middle node
+        
+        //compare the two halves
+        ListNode* head1 = head;
+       ListNode* head2= middle->next;
+        
+        while(head2!=NULL){
+            if(head1->val != head2->val){
+                return false;
+            }
+            head1=head1->next;
+            head2= head2->next;
         }
         
-        return checkPalindrome(arr);
+        temp = middle ->next;
+        middle->next =reverse(temp);
+        
+        return true;
+       
     }
 };
