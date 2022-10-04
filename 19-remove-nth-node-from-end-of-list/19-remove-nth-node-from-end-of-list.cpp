@@ -16,35 +16,22 @@ public:
             return head;
         }
         
-        ListNode* temp =head;
-        int count=0;
+        ListNode* dummy = new ListNode();
+        dummy ->next = head;
         
-        while(temp!=NULL){
-            count++;
-            temp = temp->next;
-        }
-        temp = head;
-        int x = count - n;
+        ListNode* slow = dummy;
+        ListNode* fast = dummy;
         
-        if(x==0){
-            ListNode* node = head;
-            head=head->next;
-            delete(node);
-            return head;
+        for(int i=1;i<=n;i++){
+            fast = fast->next;
         }
         
-        while(x!=0){
-            
-            x--;
-            if(x==0){
-               ListNode* node = temp ->next;
-                temp->next = temp->next->next;
-                delete(node);
-            }
-            temp = temp->next;
+        while(fast->next!=NULL){
+            slow = slow->next;
+            fast =fast->next;
         }
+        slow ->next = slow->next ->next;
         
-        
-        return head;
+        return dummy->next;
     }
 };
